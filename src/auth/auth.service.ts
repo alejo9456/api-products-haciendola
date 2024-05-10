@@ -50,7 +50,6 @@ export class AuthService {
       where: { email },
       select: { email: true, password:true}
     });
-
     if(!user )
       throw new UnauthorizedException('Credentials are not valid');
     
@@ -58,15 +57,27 @@ export class AuthService {
       throw new UnauthorizedException('Credentials are not valid');
 
     return {
-      ...user,
+      ok: true,
+      message: 'Login exitoso',
+      email: user.email,
       token: this.getJwtToken( { email: user.email } )
     };
 
 
   }
 
+  async validateToken(token: string): Promise<User> {
+    const payload: JwtPayload = this.jwtService.verify(token);
 
-  private getJwtToken( payload: JwtPayload ){
+    const user = await this.userRepository.findOne({ where: { email: payload.email } });
+
+    if (!user || !user.isActive) {
+        throw new UnauthorizedException('User not found or inactive');
+    }
+    return user;
+  }
+
+  public getJwtToken( payload: JwtPayload ){
 
     const token = this.jwtService.sign( payload);
 

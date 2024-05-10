@@ -1,8 +1,9 @@
-import { Controller, Post, Body} from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException, Get, Request} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -56,4 +57,21 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
+  @Get('validate')
+    async validateToken(@Request() req): Promise<User> {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            throw new UnauthorizedException('No token provided');
+        }
+
+        try {
+            const user = await this.authService.validateToken(token);
+            return user;
+        } catch (error) {
+            throw new UnauthorizedException('Invalid token');
+        }
+    }
+
+
+ 
 }
