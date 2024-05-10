@@ -32,12 +32,15 @@ export class CreateProductDto {
     @IsOptional()
     price?: number;
     
-    
     @IsNumber()
     @IsPositive()
     @IsOptional()
     compare_price?:number; 
 
     @IsString()
-    barcode: string;
+    @IsOptional()
+    barcode?: string;
+
+    @IsString()
+    userId: string;
 }

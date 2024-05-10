@@ -1,4 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from '../../auth/entities/user.entity';
 
 
 @Entity()
@@ -40,6 +41,15 @@ export class Product {
     @Column('text')
     barcode: string;
 
+
+    @ManyToOne(
+        () => User,
+        ( user ) => user.product
+    )
+    user: User;
+
+    @Column('text')
+    userId: string;
 
     @BeforeInsert()
     checkHandleInsert(){
