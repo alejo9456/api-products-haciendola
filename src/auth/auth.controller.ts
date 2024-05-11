@@ -1,9 +1,10 @@
-import { Controller, Post, Body, UnauthorizedException, Get, Request} from '@nestjs/common';
+import { Controller, Post, Body, UnauthorizedException, Get, Request, UseGuards, Param} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from './dto';
-import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -72,6 +73,13 @@ export class AuthController {
         }
     }
 
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard('jwt'))
+    @Get('users/:email')
+    async getUserId(@Param('email') email: string) {
+        const user = await this.authService.findOne(email);
+        return { userId: user.id };
+    }
 
  
 }

@@ -85,6 +85,10 @@ export class AuthService {
 
   }
 
+  async findOne(email: string) {
+    const userId = await this.userRepository.findOne({ where: { email } });
+    return userId;
+  }
 
   private handleDBErrors( error: any): never{
     if( error.code == 23505)

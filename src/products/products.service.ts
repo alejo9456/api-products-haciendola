@@ -80,6 +80,7 @@ export class ProductsService {
     }
 
     if(!product ) throw new NotFoundException(`Product with id ${term} not found`);
+    console.log(product);
     return product;
   }
 
