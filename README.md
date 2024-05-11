@@ -49,5 +49,9 @@ A continuación se detallan los pasos para clonar, configurar y ejecutar el proy
     ```shell
     http://localhost:3000/api/seed
     ```
+    - También puedes consultar la documentación de la API en Swagger 
+     ```shell
+    http://localhost:3000/api#/
+    ```
 
 ¡Listo! Ahora el proyecto debería estar configurado y ejecutándose correctamente en tu entorno local. Si tienes alguna pregunta o problema, no dudes en revisar la documentación adicional o en contactar con el autor del proyecto.
